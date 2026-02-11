@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 
 const StaticMap = ({ latitude, longitude }) => {
   const region = {
@@ -21,7 +21,9 @@ const StaticMap = ({ latitude, longitude }) => {
       zoomTapEnabled={false}
       zoomControlEnabled={false}
       poiClickEnabled={false}
-    ></MapView>
+    >
+      <Marker coordinate={{ latitude, longitude }} />
+    </MapView>
   );
 };
 
