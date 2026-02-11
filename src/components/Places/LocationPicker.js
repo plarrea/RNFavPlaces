@@ -1,13 +1,18 @@
+import { useNavigation } from '@react-navigation/native';
 import {
   getCurrentPositionAsync,
   PermissionStatus,
   useForegroundPermissions,
 } from 'expo-location';
-import { Alert, StyleSheet, View } from 'react-native';
+import { useState } from 'react';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import { Colors } from '../../constants/colors';
 import OutlinedButton from '../UI/OutlinedButton';
+import StaticMap from '../UI/StaticMap';
 
 const LocationPicker = () => {
+  const [pickedLocation, setPickedLocation] = useState(null);
+  const navigation = useNavigation();
   const [locationPermissionInformation, requestPermission] =
     useForegroundPermissions();
 
@@ -36,17 +41,29 @@ const LocationPicker = () => {
     const result = await getCurrentPositionAsync({});
 
     if (result && result.coords) {
-      console.log(
-        `User location: lat: ${result.coords.latitude}, lng: ${result.coords.longitude}`,
-      );
+      setPickedLocation({
+        lat: result.coords.latitude,
+        lng: result.coords.longitude,
+      });
     }
   };
 
-  const pickOnMapHandler = () => {};
+  const pickOnMapHandler = () => {
+    navigation.navigate('Map');
+  };
 
   return (
     <View style={{ marginBottom: 64 }}>
-      <View style={styles.mapPreview}></View>
+      <View style={styles.mapPreview}>
+        {pickedLocation ? (
+          <StaticMap
+            latitude={pickedLocation.lat}
+            longitude={pickedLocation.lng}
+          />
+        ) : (
+          <Text>No Location taken yet.</Text>
+        )}
+      </View>
       <View style={styles.actions}>
         <OutlinedButton icon="location" onPress={getLocationHandler}>
           Locate User
@@ -70,10 +87,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.primary100,
     borderRadius: 4,
+    overflow: 'hidden',
   },
   actions: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
   },
 });
