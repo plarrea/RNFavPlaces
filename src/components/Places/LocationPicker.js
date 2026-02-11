@@ -1,18 +1,24 @@
-import { useNavigation } from '@react-navigation/native';
+import {
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {
   getCurrentPositionAsync,
   PermissionStatus,
   useForegroundPermissions,
 } from 'expo-location';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import { Colors } from '../../constants/colors';
 import OutlinedButton from '../UI/OutlinedButton';
 import StaticMap from '../UI/StaticMap';
 
-const LocationPicker = () => {
+const LocationPicker = ({ onPickLocation }) => {
   const [pickedLocation, setPickedLocation] = useState(null);
+  const isFocused = useIsFocused();
   const navigation = useNavigation();
+  const route = useRoute();
   const [locationPermissionInformation, requestPermission] =
     useForegroundPermissions();
 
@@ -52,8 +58,19 @@ const LocationPicker = () => {
     navigation.navigate('Map');
   };
 
+  useEffect(() => {
+    if (isFocused && !!route.params) {
+      const mapPickedLocation = route.params.selectedLocation;
+      setPickedLocation(mapPickedLocation);
+    }
+  }, [isFocused, route]);
+
+  useEffect(() => {
+    onPickLocation(pickedLocation);
+  }, [pickedLocation, onPickLocation]);
+
   return (
-    <View style={{ marginBottom: 64 }}>
+    <View>
       <View style={styles.mapPreview}>
         {pickedLocation ? (
           <StaticMap
