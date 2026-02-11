@@ -1,14 +1,15 @@
-import { useCallback, useLayoutEffect, useState } from 'react';
+import { useCallback, useLayoutEffect } from 'react';
 import { Alert, StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import IconButton from '../components/UI/IconButton';
+import usePlaceForm from '../store/PlaceForm/use-place-form';
 
 const Map = ({ navigation }) => {
-  const [selectedLocation, setSelectecLocation] = useState(null);
+  const { pickedLocation, setPickedLocation } = usePlaceForm();
 
   const region = {
-    latitude: 37.78,
-    longitude: -122.43,
+    latitude: pickedLocation.lat,
+    longitude: pickedLocation.lng,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };
@@ -17,20 +18,19 @@ const Map = ({ navigation }) => {
     const lat = event.nativeEvent.coordinate.latitude;
     const lng = event.nativeEvent.coordinate.longitude;
 
-    setSelectecLocation({ lat, lng });
+    setPickedLocation({ lat, lng });
   };
 
   const savePickedLocationHandler = useCallback(() => {
-    if (!selectedLocation) {
+    if (!pickedLocation) {
       Alert.alert(
         'No location picked!',
         'You have to pick a location (by tapping on the map) first!',
       );
       return;
     }
-
-    navigation.navigate('AddPlace', { selectedLocation });
-  }, [selectedLocation, navigation]);
+    navigation.goBack();
+  }, [pickedLocation, navigation]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -51,11 +51,11 @@ const Map = ({ navigation }) => {
       initialRegion={region}
       onPress={selectLocationHandler}
     >
-      {!!selectedLocation && (
+      {!!pickedLocation && (
         <Marker
           coordinate={{
-            latitude: selectedLocation.lat,
-            longitude: selectedLocation.lng,
+            latitude: pickedLocation.lat,
+            longitude: pickedLocation.lng,
           }}
         />
       )}
