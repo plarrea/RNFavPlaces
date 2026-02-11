@@ -32,7 +32,7 @@ const PlaceForm = ({ onCreatePlace }) => {
       const address = await getAddressFromCoords(location.lat, location.lng);
       setPickedAddress(address.formatted);
     };
-    getAddress(pickedLocation);
+    if (!!pickedLocation) getAddress(pickedLocation);
   }, [pickedLocation]);
 
   const savePlaceHandler = async () => {

@@ -1,4 +1,4 @@
-import { createContext, useMemo, useState } from 'react';
+import { createContext, useCallback, useMemo, useState } from 'react';
 
 export const PlaceFormContext = createContext({
   enteredTitle: '',
@@ -9,6 +9,7 @@ export const PlaceFormContext = createContext({
   setPickedImage: () => {},
   setPickedLocation: () => {},
   setPickedAddress: () => {},
+  resetForm: () => {},
 });
 
 const PlaceFormProvider = ({ children }) => {
@@ -16,6 +17,13 @@ const PlaceFormProvider = ({ children }) => {
   const [pickedImage, setPickedImage] = useState('');
   const [pickedLocation, setPickedLocation] = useState('');
   const [pickedAddress, setPickedAddress] = useState('');
+
+  const resetForm = useCallback(() => {
+    setEnteredTitle('');
+    setPickedImage('');
+    setPickedLocation('');
+    setPickedAddress('');
+  }, []);
 
   const value = useMemo(
     () => ({
@@ -27,6 +35,7 @@ const PlaceFormProvider = ({ children }) => {
       setPickedImage,
       setPickedLocation,
       setPickedAddress,
+      resetForm,
     }),
     [enteredTitle, pickedImage, pickedLocation, pickedAddress],
   );
