@@ -14,3 +14,36 @@ export const init = () => {
     )`,
   );
 };
+
+export const insertPlace = (place) => {
+  return database.runAsync(
+    `INSERT INTO places (title, imageUri, address, lat, lng) VALUES (?, ?, ?, ?, ?)`,
+    [
+      place.title,
+      place.imageUri,
+      place.address,
+      place.location.lat,
+      place.location.lng,
+    ],
+  );
+};
+
+export const fetchPlaces = async () => {
+  const allPlaces = await database.getAllAsync('SELECT * FROM places');
+  if (allPlaces && allPlaces.length) {
+    return allPlaces.map(
+      (fp) =>
+        new Place(
+          fp.title,
+          fp.imageUri,
+          fp.address,
+          {
+            lat: fp.lat,
+            lng: fp.lng,
+          },
+          fp.id,
+        ),
+    );
+  }
+  return [];
+};

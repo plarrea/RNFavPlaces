@@ -23,7 +23,7 @@ export default function App() {
         setDbInitialized(true);
       })
       .catch((err) => {
-        console.log(err);
+        console.log('Error loading db', err);
       });
   }, []);
 

@@ -6,11 +6,11 @@ const nanoid = customAlphabet(
 );
 
 export class Place {
-  constructor(title, imageUri, address, location) {
+  constructor(title, imageUri, address, location, id) {
     this.title = title;
     this.imageUri = imageUri;
     this.address = address;
     this.location = location; // { lat: number, lng: number}
-    this.id = nanoid();
+    this.id = id;
   }
 }

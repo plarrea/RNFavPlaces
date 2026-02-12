@@ -18,7 +18,7 @@ const PlacesList = ({ places }) => {
       style={styles.list}
       data={places}
       keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <PlaceItem {...item} />}
+      renderItem={({ item }) => <PlaceItem place={item} />}
     />
   );
 };
