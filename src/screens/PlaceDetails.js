@@ -9,7 +9,10 @@ const PlaceDetails = ({ route, navigation }) => {
   const selectedPlaceId = useMemo(() => route.params.placeId);
 
   const showOnMapHandler = () => {
-    navigation.navigate('Map');
+    navigation.navigate('Map', {
+      initialLat: place.location.lat,
+      initialLng: place.location.lng,
+    });
   };
 
   useEffect(() => {
