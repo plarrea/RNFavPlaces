@@ -8,6 +8,7 @@ import { Colors } from './src/constants/colors';
 import AddPlace from './src/screens/AddPlace';
 import AllPlaces from './src/screens/AllPlaces';
 import Map from './src/screens/Map';
+import PlaceDetails from './src/screens/PlaceDetails';
 import PlaceFormProvider from './src/store/PlaceForm/place-form-context';
 import { init } from './src/utils/database';
 
@@ -21,6 +22,7 @@ export default function App() {
     init()
       .then(() => {
         setDbInitialized(true);
+        console.log('Db initialized');
       })
       .catch((err) => {
         console.log('Error loading db', err);
@@ -70,6 +72,11 @@ export default function App() {
               }}
             />
             <Stack.Screen name="Map" component={Map} />
+            <Stack.Screen
+              name="PlaceDetails"
+              component={PlaceDetails}
+              options={{ title: 'Loading Place...' }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </PlaceFormProvider>

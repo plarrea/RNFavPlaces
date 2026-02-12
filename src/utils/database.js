@@ -1,4 +1,5 @@
 import * as SQLite from 'expo-sqlite';
+import { Place } from '../models/Place';
 
 const database = SQLite.openDatabaseSync('places.db');
 
@@ -46,4 +47,25 @@ export const fetchPlaces = async () => {
     );
   }
   return [];
+};
+
+export const fetchPlaceDetails = async (id) => {
+  const place = await database.getFirstAsync(
+    'SELECT * FROM places WHERE id = ?',
+    id,
+  );
+  if (place) {
+    console.log('place found by id', place);
+    return new Place(
+      place.title,
+      place.imageUri,
+      place.address,
+      {
+        lat: place.lat,
+        lng: place.lng,
+      },
+      place.id,
+    );
+  }
+  return null;
 };

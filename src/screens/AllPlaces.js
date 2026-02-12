@@ -16,6 +16,7 @@ const AllPlaces = () => {
       console.log(fetchedPlaces);
     };
     if (isFocused) {
+      console.log('Fetching places');
       loadPlaces();
     }
   }, [isFocused]);

@@ -8,8 +8,8 @@ const Map = ({ navigation }) => {
   const { pickedLocation, setPickedLocation } = usePlaceForm();
 
   const region = {
-    latitude: pickedLocation.lat,
-    longitude: pickedLocation.lng,
+    latitude: pickedLocation.lat || 37.78,
+    longitude: pickedLocation.lng || -122.43,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };
