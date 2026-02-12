@@ -1,16 +1,40 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
+import { useEffect, useState } from 'react';
 import IconButton from './src/components/UI/IconButton';
 import { Colors } from './src/constants/colors';
 import AddPlace from './src/screens/AddPlace';
 import AllPlaces from './src/screens/AllPlaces';
 import Map from './src/screens/Map';
 import PlaceFormProvider from './src/store/PlaceForm/place-form-context';
+import { init } from './src/utils/database';
 
+SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [dbInitialized, setDbInitialized] = useState(false);
+
+  useEffect(() => {
+    init()
+      .then(() => {
+        setDbInitialized(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (dbInitialized) {
+      SplashScreen.hide();
+    }
+  }, [dbInitialized]);
+
+  if (!dbInitialized) return null;
+
   return (
     <>
       <StatusBar style="dark" />
